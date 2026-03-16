@@ -1,0 +1,87 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class OnlineVotingSystem {
+
+    static final String URL = "jdbc:mysql://localhost:3306/voting_system";
+    static final String USER = "root";
+    static final String PASSWORD = "root";
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+
+            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            System.out.println("===== ONLINE VOTING SYSTEM =====");
+
+            System.out.print("Enter Voter ID: ");
+            int voterId = sc.nextInt();
+
+            String checkQuery = "SELECT * FROM voters WHERE id=?";
+            PreparedStatement pst = con.prepareStatement(checkQuery);
+            pst.setInt(1, voterId);
+
+            ResultSet rs = pst.executeQuery();
+
+            if(rs.next()) {
+
+                int age = rs.getInt("age");
+                boolean voted = rs.getBoolean("voted");
+
+                if(age < 18) {
+                    System.out.println("❌ You are not eligible to vote.");
+                }
+
+                else if(voted) {
+                    System.out.println("❌ You have already voted.");
+                }
+
+                else {
+
+                    System.out.println("\nChoose Candidate:");
+                    System.out.println("1. Candidate A");
+                    System.out.println("2. Candidate B");
+
+                    int choice = sc.nextInt();
+
+                    String voteQuery =
+                            "UPDATE candidates SET votes=votes+1 WHERE id=?";
+
+                    PreparedStatement votePst =
+                            con.prepareStatement(voteQuery);
+
+                    votePst.setInt(1, choice);
+                    votePst.executeUpdate();
+
+                    String updateVoter =
+                            "UPDATE voters SET voted=TRUE WHERE id=?";
+
+                    PreparedStatement updatePst =
+                            con.prepareStatement(updateVoter);
+
+                    updatePst.setInt(1, voterId);
+                    updatePst.executeUpdate();
+
+                    System.out.println("✅ Vote Cast Successfully!");
+                }
+
+            }
+
+            else {
+                System.out.println("❌ Voter not found.");
+            }
+
+            con.close();
+
+        }
+
+        catch(Exception e) {
+            System.out.println(e);
+        }
+
+        sc.close();
+    }
+}

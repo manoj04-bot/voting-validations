@@ -1,0 +1,43 @@
+CREATE DATABASE voting_system;
+
+USE voting_system;
+
+CREATE TABLE voters(
+id INT PRIMARY KEY,
+name VARCHAR(50),
+age INT,
+voted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE candidates(
+id INT PRIMARY KEY,
+name VARCHAR(50),
+votes INT DEFAULT 0
+);
+
+INSERT INTO candidates VALUES
+(1,'Candidate A',0),
+(2,'Candidate B',0),
+(3,'Candidate C',0);
+
+INSERT INTO voters VALUES
+(101,'Rahul',22,false),
+(102,'Anita',19,false),
+(103,'Ravi',17,false),
+(104,'Karthik',21,false),
+(105,'Priya',24,false),
+(106,'Arjun',30,false),
+(107,'Sneha',18,false),
+(108,'Vikram',35,false),
+(109,'Divya',27,false),
+(110,'Ramesh',40,false),
+(111,'Lakshmi',23,false),
+(112,'Suresh',29,false),
+(113,'Meena',20,false),
+(114,'Ajay',26,false),
+(115,'Pooja',19,false),
+(116,'Naveen',22,false),
+(117,'Deepa',28,false),
+(118,'Varun',31,false),
+(119,'Anjali',25,false),
+(120,'Prakash',34,false);
